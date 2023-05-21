@@ -1,9 +1,0 @@
-bin/
-obj/
-
-*.suo
-
-
-.vs/
-
-packages/
