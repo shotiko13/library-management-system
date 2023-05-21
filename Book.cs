@@ -9,14 +9,9 @@ namespace Library
     public enum Genre
     {
         Fiction,
-        NonFiction,
-        Mystery,
-        Fantasy,
-        Romance,
-        ScienceFiction,
-        Biography,
         Horror,
-     
+        Mystery,
+        Thriller,
     }
     public class Book
     {
@@ -29,15 +24,23 @@ namespace Library
         private int Quantity { get; set; }
 
 
-        public Book(string title, string author, string? description, Genre bookGenre)
+        public Book(string title, string author, Genre bookGenre)
         {
-            Id = ++_idCounter;
-            Title = title;
-            Author = author;
-            Description = description;
-            BookGenre = bookGenre;
-            Quantity = 1;
+            this.Title = title;
+            this.Author = author;
+            this.BookGenre = bookGenre;
+            this.Quantity = 1;
+            this.Id = ++_idCounter;
         }
+        public Book(string title, string author, Genre bookGenre, int quantity)
+        {
+            this.Title = title;
+            this.Author = author;
+            this.BookGenre = bookGenre;
+            this.Quantity = quantity;
+            this.Id = ++_idCounter;
+        }
+
         public void IncreaseQuantity(int amount = 1)
         {
             Quantity += amount;
@@ -46,11 +49,25 @@ namespace Library
         public void DecreaseQuantity(int amount = 1)
         {
             if (Quantity - amount < 0) throw new InvalidOperationException("Can't decrease quantity - It is already 0");
-            else Quantity -= amount;
+            else
+            {
+                Quantity -= amount;
+                if (Quantity == 0)
+                {
+                    Console.WriteLine($"Book {Title} is out of Stock");
+                }
+            };
         }
-        public Book(string title, string author, string? description, Genre bookGenre, int quantity) : this(title, author, description, bookGenre)
+
+        public bool IsOutOfStock ()
         {
-            Quantity = quantity;
+            return Quantity == 0;   
+        }
+
+        public Book FindByTitle(string title)
+        {
+            if (title == Title) return this;
+            else return null;
         }
 
         public override bool Equals(Object obj)
@@ -63,6 +80,16 @@ namespace Library
         public override string? ToString()
         {
             return $"ID: {Id}, Title: {Title}, Author: {Author}, Genre: {BookGenre}, Quantity: {Quantity}"; 
+        }
+
+        public string getTitle()
+        {
+            return Title;
+        }
+
+        public int getID()
+        {
+            return Id;
         }
     }
 }
