@@ -7,3 +7,9 @@ obj/
 .vs/
 
 packages/
+
+!Program.cs
+!Library.cs
+!Book.cs
+!.gitignore
+!README.md

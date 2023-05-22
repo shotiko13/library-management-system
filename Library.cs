@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json; 
 
 namespace Library
 {
     internal class Library
     {
         private List<Book> books;
-
-        public Library(List<Book> books)
+        public string Filename { get; private set; }
+        public Library(string filename)
         {
-            this.books = books ?? new List<Book>();
+            this.books = new List<Book>();
+            Filename = filename;
         }
 
         public void AddBook(Book book)
@@ -69,5 +71,34 @@ namespace Library
                 Console.WriteLine(book.ToString());
             }
         }
+        
+        public async Task SaveLibraryDataAsync()
+        {
+            var jsonData = JsonConvert.SerializeObject(this.books);
+            await File.WriteAllTextAsync(Filename, jsonData);
+        }
+
+        public static async Task<Library> LoadLibraryDataAsync(string filename)
+        {
+            Library library = new Library(filename);
+            if (!File.Exists(filename))
+            {
+                return library;
+            }
+
+            var jsonData = await File.ReadAllTextAsync(filename);
+            
+            try
+            {
+                library.books = JsonConvert.DeserializeObject<List<Book>>(jsonData);    
+            }
+            catch(JsonException e)
+            {
+                Console.WriteLine("Error parsing data: " + e.Message);
+                
+            }
+            return library;
+        }
+
     }
 }

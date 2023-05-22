@@ -8,9 +8,12 @@ namespace Library
 {
     internal class Program
     {
-        static void Main(string[] args)
+        private const string FileName = "LibraryData.json";
+        static async Task Main(string[] args)
         {
-            Library library = new Library(new List<Book>());
+
+            Library library = await Library.LoadLibraryDataAsync(FileName);
+            
 
             Console.WriteLine("\nWelcome to the Library");
             Console.WriteLine("Please select an option:");
@@ -21,6 +24,7 @@ namespace Library
             Console.WriteLine("5. Instructions");
             Console.WriteLine("6. Exit");
 
+            library.SaveLibraryDataAsync();
             while (true)
             {
                 int option = Convert.ToInt32(Console.ReadLine());
@@ -46,6 +50,7 @@ namespace Library
                         Book newBook = new Book(title, author, genre);
                         library.AddBook(newBook);
                         Console.WriteLine($"Book {title} added successfully.");
+                        await library.SaveLibraryDataAsync();
                         break;
                     case 2:
                         Console.WriteLine("Enter book details to remove:");
@@ -58,6 +63,7 @@ namespace Library
 
                         Book bookToRemove = new Book(titleToRemove, authorToRemove, genreToRemove);
                         library.RemoveBook(bookToRemove);
+                        await library.SaveLibraryDataAsync();
                         break;
                     case 3:
                         Console.WriteLine("Enter 1 to find by title, 2 to find by ID: ");

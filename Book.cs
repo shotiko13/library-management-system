@@ -23,6 +23,10 @@ namespace Library
         private Genre BookGenre { get; set; }
         private int Quantity { get; set; }
 
+        public Book()
+        {
+            //Deserialize method needs default constructor
+        }
 
         public Book(string title, string author, Genre bookGenre)
         {
